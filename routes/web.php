@@ -35,22 +35,22 @@ Route::middleware('auth')->group(function () {
     // Admin Dashboard Route
     Route::middleware('role:admin')->group(function(){
         Route::get('admin/dashboard', function(){
-            return view('dashboard');
-        })->name('dashboard');
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
     });
 
     // Employer Dashboard Routes
     Route::middleware('role:employer')->group(function(){
         Route::get('employer/dashboard', function(){
-            return view('dashboard');
-        })->name('dashboard');
+            return view('employer.dashboard');
+        })->name('employer.dashboard');
     });
 
     // Jobseeker Dashboard Routes
     Route::middleware('role:job_seeker')->group(function(){
         Route::get('jobseeker/dashboard', function(){
-            return view('dashboard');
-        })->name('dashboard');
+            return view('jobseeker.dashboard');
+        })->name('jobseeker.dashboard');
     });
 });
 
