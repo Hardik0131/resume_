@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Constraint\IsEqualWithDelta;
@@ -51,6 +52,10 @@ Route::middleware('auth')->group(function () {
         Route::get('jobseeker/dashboard', function(){
             return view('jobseeker.dashboard');
         })->name('jobseeker.dashboard');
+
+        // Resume Upload Routes
+        Route::get('jobseeker/upload-resume', [ResumeController::class, 'create'])->name('resume.create');
+        Route::post('jobseeker/upload-resume', [ResumeController::class, 'store'])->name('resume.store');
     });
 });
 
