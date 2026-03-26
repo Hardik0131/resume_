@@ -34,14 +34,14 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['nullable', 'string', 'in:job_seeker,employer'],
+            'role' => ['nullable', 'string', 'in:job_seeker, employer'], // Validate role if provided
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'job_seeker', // Default role is 'job_seeker' if not provided
+            'role' => $request->role ?? 'job_seeker', // Default to 'job_seeker' if role is not provided
         ]);
 
         event(new Registered($user));
