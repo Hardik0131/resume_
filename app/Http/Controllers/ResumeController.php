@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resume;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Smalot\PdfParser\Parser;
 
 class ResumeController extends Controller
 {
@@ -14,16 +15,25 @@ class ResumeController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'resume' => 'required|mimes:pdf|max:2048', // Validate that the uploaded file is a PDF and not larger than 2MB
+            'resume' => 'required|mimes:pdf|max:2028',
         ]);
 
-        $path = $request->file('resume')->store('resumes', 'public'); // Store the file in the 'resumes' directory within the 'public' disk
+        $file = $request->file('resume');
+        $path = $file->store('resumes', 'public');
+
+        $parser = new Parser();
+        $pdf = $parser->parseFile(storage_path('app/public/'. $path));
+        $text = $pdf->getText();
+
+        $score = Resume::calculateScore($text);
 
         Resume::create([
             'user_id' => Auth::id(),
             'file_path' => $path,
+            'content' => $text,
+            'score' => $score,
         ]);
 
-        return back()->with('success', 'Resume uploaded successfully!');
+        return back()->with('success', 'Resume uploaded Successfully! Your resume score is: ' . $score);
     }
 }

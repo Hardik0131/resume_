@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Auth;
@@ -36,22 +37,25 @@ Route::middleware('auth')->group(function () {
     // Admin Dashboard Route
     Route::middleware('role:admin')->group(function(){
         Route::get('admin/dashboard', function(){
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+            return view('dashboard');
+        })->name('dashboard');
     });
 
     // Employer Dashboard Routes
     Route::middleware('role:employer')->group(function(){
         Route::get('employer/dashboard', function(){
-            return view('employer.dashboard');
-        })->name('employer.dashboard');
+            return view('dashboard');
+        })->name('dashboard');
+
+        Route::get('employer/job/create', [ListingController::class, 'index'])->name('listing.create');
+        Route::post('employer/job/create', [ListingController::class, 'store'])->name('listing.store');
     });
 
     // Jobseeker Dashboard Routes
     Route::middleware('role:job_seeker')->group(function(){
         Route::get('jobseeker/dashboard', function(){
-            return view('jobseeker.dashboard');
-        })->name('jobseeker.dashboard');
+            return view('dashboard');
+        })->name('dashboard');
 
         // Resume Upload Routes
         Route::get('jobseeker/upload-resume', [ResumeController::class, 'create'])->name('resume.create');
