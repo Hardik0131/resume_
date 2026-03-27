@@ -12,6 +12,11 @@ class ListingController extends Controller
         return view('employer.create-listing');
     }
 
+    public function job(){
+        $jobs = Listing::latest()->get();
+        return view('jobseeker.job', compact('jobs'));
+    }
+
     public function store(Request $request){
         $request->validate([
             'title' => 'required',
@@ -28,5 +33,14 @@ class ListingController extends Controller
         ]);
 
         return back()->with('success', 'Job Created Successfully!');
+    }
+
+    public function applicants($jobId){
+        $job = Listing::with(['applications.user'])->findOrFail($jobId);
+
+        $applicants = $job->applications()
+                            ->orderByDesc('match_score')
+                            ->get();
+        return view('employer.applicants', compact('applicants', 'job'));
     }
 }

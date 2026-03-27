@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResumeController;
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('employer/job/create', [ListingController::class, 'index'])->name('listing.create');
         Route::post('employer/job/create', [ListingController::class, 'store'])->name('listing.store');
+        Route::get('employer/job/{id}/applicants', [ListingController::class, 'applicants'])->name('listing.applicants');
     });
 
     // Jobseeker Dashboard Routes
@@ -60,6 +62,8 @@ Route::middleware('auth')->group(function () {
         // Resume Upload Routes
         Route::get('jobseeker/upload-resume', [ResumeController::class, 'create'])->name('resume.create');
         Route::post('jobseeker/upload-resume', [ResumeController::class, 'store'])->name('resume.store');
+        Route::get('/apply/{job}', [ApplicationController::class, 'apply'])->name('job.apply');
+        Route::get('/jobs', [ListingController::class, 'job'])->name('job.show');
     });
 });
 

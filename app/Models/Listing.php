@@ -18,7 +18,7 @@ class Listing extends Model
         'experience',
     ];
 
-    public function matchScore($resumeText, $jobSkills){
+    public static function matchScore($resumeText, $jobSkills){
         $resumeText = strtolower($resumeText);
         $jobSkillsArray = array_map('trim', explode(',', $jobSkills));
 
